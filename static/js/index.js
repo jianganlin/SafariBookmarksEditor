@@ -45,6 +45,33 @@ new Vue({
             Object.keys(this.tmpItem).forEach(tmpKey => {
                 this.tmpItem[tmpKey] = item[tmpKey]
             })
+        },
+        doShowNext() {
+            // this.$message('next')
+            const idx = this.recordList.findIndex(value => {
+                return value.dateAdded === this.tmpItem.dateAdded
+            })
+            if (idx < this.recordList.length - 1) {
+                const item = this.recordList[idx + 1]
+                Object.keys(this.tmpItem).forEach(tmpKey => {
+                    this.tmpItem[tmpKey] = item[tmpKey]
+                })
+            } else {
+                this.$message('没有了')
+            }
+        },
+        doShowPrevious() {
+            const idx = this.recordList.findIndex(value => {
+                return value.dateAdded === this.tmpItem.dateAdded
+            })
+            if (idx > 0) {
+                const item = this.recordList[idx - 1]
+                Object.keys(this.tmpItem).forEach(tmpKey => {
+                    this.tmpItem[tmpKey] = item[tmpKey]
+                })
+            } else {
+                this.$message('没有了')
+            }
         }
     }
 })
