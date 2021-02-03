@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Safari Bookmark">
+<meta name="description" content="Safari Bookmarks Editor">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Jiang Alan">
+<link rel="shortcut icon" href="/static/img/logo.png">
+    <title>Safari Bookmarks Editor</title>
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/element-ui/lib/theme-chalk/index.css">
+
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/element-ui/lib/index.js"></script>
+
+    <style>
+        #appContainerID {
+            display: flex;
+            justify-content: center;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #app {
+            max-width: 800px;
+        }
+
+        .site-img {
+            width: 100px;
+            border: 1px solid #cccccc;
+            border-radius: 2px;
+            position: absolute;
+        }
+
+        .right-content {
+            position: relative;
+            padding-left: 120px;
+            min-height: 100px;
+        }
+
+        .record-title {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .record-title:hover {
+            text-decoration: underline;
+        }
+
+        .preview {
+            margin-top: 16px;
+            color: darkgray;
+            font-size: 14px;
+        }
+
+        img[lazy=loading] {
+            width: 100px;
+            border: 1px solid #ECECEC;
+            border-radius: 2px;
+        }
+
+        img[lazy=error] {
+            width: 100px;
+            border: 1px solid #ECECEC;
+            border-radius: 2px;
+        }
+
+        img[lazy=loaded] {
+            width: 100px;
+            border: 1px solid #ECECEC;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="appContainerID">
+    <div id="app">
+        <div class="block" v-loading="isLoading">
+            <el-timeline>
+                <el-timeline-item v-for="item of recordList" :key="(item.url + item.dateAdded)"
+                                  :timestamp="item.dateAdded" placement="top">
+                    <el-card>
+                        <div>
+                            <div style="position: relative" v-if="item.imgUrl">
+                                <img v-lazy="item.imgUrl" class="site-img">
+                                <div class="right-content">
+                                    <h4 class="record-title" @click="doShowRecord(item)">{{item.title}}</h4>
+                                    <p class="preview">{{item.preview}}</p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <h4 class="record-title" @click="doShowRecord(item)">{{item.title}}</h4>
+                                <p class="preview">{{item.preview}}</p>
+                            </div>
+                        </div>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
+        </div>
+
+        <el-dialog :visible.sync="isShowDialog" :title="tmpItem.title" width="80%">
+            <div v-if="isShowDialog && tmpItem.url">
+                <iframe id="inlineFrameExample" style="width: 100%; height: 600px" :src="tmpItem.url"></iframe>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+</div>
+</body>
+
+<script src="/static/js/vue-lazyload.js" type="text/javascript"></script>
+<script src="/static/js/api.js" type="text/javascript"></script>
+<script src="/static/js/index.js" type="text/javascript"></script>
+</html>
