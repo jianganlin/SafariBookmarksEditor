@@ -160,7 +160,9 @@
         <el-dialog :visible.sync="isShowDialog" :append-to-body="true" :show-close="false" width="90%" top="20px">
             <div v-if="isShowDialog && tmpItem.url">
                 <div style="margin-bottom: 10px">
-                    <h4 style="text-align: center">{{ tmpItem.title }}</h4>
+                    <a :href="tmpItem.url">
+                        <h4 style="text-align: center">{{ tmpItem.title }}</h4>
+                    </a>
                 </div>
                 <iframe id="inlineFrameExample" style="width: 100%; height: 600px" :src="tmpItem.url"></iframe>
                 <div style="margin-top: 10px">

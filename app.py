@@ -31,6 +31,10 @@ app.jinja_env.comment_start_string = '(#'  # 修改注释开始符号
 app.jinja_env.comment_end_string = '#)'  # 修改注释结束符号
 app.jinja_env.auto_reload = True  # 热更新
 
+if not os.path.exists("./data"):
+    print('创建data文件夹')
+    os.mkdir("data")
+
 
 class ReadingItem(db.Model):
     __tablename__ = 'reading_item'

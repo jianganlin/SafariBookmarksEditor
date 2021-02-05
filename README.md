@@ -40,6 +40,7 @@ pip3 install flask_sqlalchemy
 pip3 install marshmallow-sqlalchemy
 pip3 install flask-marshmallow
 
+
 初始化数据:
 flask initdb
 
