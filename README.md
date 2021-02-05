@@ -28,17 +28,21 @@ https://zhuanlan.zhihu.com/p/94617478
 python3 -m venv venv
 
 激活环境:
-venv/bin/activate
+sh ./venv/bin/activate
 
 安装flask:
-pip install flask
+pip3 install flask
 
 安装数据库依赖:
-pip install flask_sqlalchemy
+pip3 install flask_sqlalchemy
 
 安装数据映射
-pip install flask-marshmallow
+pip3 install marshmallow-sqlalchemy
+pip3 install flask-marshmallow
 
-启动: 
+初始化数据:
+flask initdb
+
+启动:
 flask run
 ```
