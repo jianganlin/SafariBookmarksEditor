@@ -89,6 +89,17 @@
             padding: 0px 0px;
         }
 
+        .pager {
+            text-align: center;
+            position: fixed;
+            background: #323332;
+            padding-bottom: 20px;
+            padding-top: 10px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+        }
+
         iframe {
             border: 1px solid lightgray;
             border-radius: 4px;
@@ -100,8 +111,8 @@
 <div id="appContainerID">
     <div id="app">
         <div class="content" v-loading="isLoading">
-            <el-timeline>
-                <el-timeline-item v-for="item of recordList" :key="(item.url + item.dateAdded)"
+            <el-timeline style="margin-bottom: 60px">
+                <el-timeline-item v-for="item of page.items" :key="(item.url + item.dateAdded)"
                                   :timestamp="item.dateAdded" placement="top">
                     <el-card>
                         <div>
@@ -120,6 +131,17 @@
                     </el-card>
                 </el-timeline-item>
             </el-timeline>
+
+            <div class="pager">
+                <el-pagination
+                        background
+                        @current-change="doLoadPage($event)"
+                        :current-page.sync="page.pageNum"
+                        :page-size="20"
+                        layout="prev, pager, next, jumper"
+                        :total="page.total">
+                </el-pagination>
+            </div>
         </div>
 
         <el-dialog :visible.sync="isShowDialog" :append-to-body="true" :show-close="false" width="90%" top="20px">
@@ -150,6 +172,6 @@
 </body>
 
 <script src="/static/js/vue-lazyload.js" type="text/javascript"></script>
-<script src="/static/js/api.js" type="text/javascript"></script>
-<script src="/static/js/index.js?q=3" type="text/javascript"></script>
+<script src="/static/js/api.js?time=((time))" type="text/javascript"></script>
+<script src="/static/js/index.js?time=((time))" type="text/javascript"></script>
 </html>

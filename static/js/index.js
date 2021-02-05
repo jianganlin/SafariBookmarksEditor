@@ -14,7 +14,6 @@ new Vue({
     data: function () {
         return {
             isLoading: false,
-            recordList: [],
             isShowDialog: false,
             tmpItem: {
                 dateAdded: '',
@@ -22,6 +21,15 @@ new Vue({
                 preview: '',
                 title: '',
                 url: ''
+            },
+            page: {
+                pageNum: 1,
+                pageCount: 0,
+                total: 0,
+                hasPrev: false,
+                nextNum: 2,
+                hasNext: true,
+                items: [],
             }
         }
     },
@@ -31,15 +39,27 @@ new Vue({
         }
     },
     mounted() {
-        this.isLoading = true
-        getData().then(resp => {
-            this.recordList = resp
-            // console.log('OK: ', resp)
+        // this.isLoading = true
+        //         // getData().then(resp => {
+        //         //     this.page.items = resp
+        //         //     // console.log('OK: ', resp)
+        //         // }).finally(() => {
+        //         //     this.isLoading = false
+        //         // })
+
+        this.doLoadPage(1)
+    },
+    methods: {
+        doLoadPage(page = 1) {
+            this.isLoading = true
+        pageItems(page).then(resp => {
+            Object.keys(this.page).forEach(tmpKey => {
+                this.page[tmpKey] = resp[tmpKey]
+            })
         }).finally(() => {
             this.isLoading = false
         })
-    },
-    methods: {
+        },
         doShowRecord(item) {
             this.isShowDialog = true
             Object.keys(this.tmpItem).forEach(tmpKey => {
@@ -48,11 +68,11 @@ new Vue({
         },
         doShowNext() {
             // this.$message('next')
-            const idx = this.recordList.findIndex(value => {
+            const idx = this.page.items.findIndex(value => {
                 return value.dateAdded === this.tmpItem.dateAdded
             })
-            if (idx < this.recordList.length - 1) {
-                const item = this.recordList[idx + 1]
+            if (idx < this.page.items.length - 1) {
+                const item = this.page.items[idx + 1]
                 Object.keys(this.tmpItem).forEach(tmpKey => {
                     this.tmpItem[tmpKey] = item[tmpKey]
                 })
@@ -61,11 +81,11 @@ new Vue({
             }
         },
         doShowPrevious() {
-            const idx = this.recordList.findIndex(value => {
+            const idx = this.page.items.findIndex(value => {
                 return value.dateAdded === this.tmpItem.dateAdded
             })
             if (idx > 0) {
-                const item = this.recordList[idx - 1]
+                const item = this.page.items[idx - 1]
                 Object.keys(this.tmpItem).forEach(tmpKey => {
                     this.tmpItem[tmpKey] = item[tmpKey]
                 })
