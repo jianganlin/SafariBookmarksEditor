@@ -56,6 +56,7 @@ new Vue({
             Object.keys(this.page).forEach(tmpKey => {
                 this.page[tmpKey] = resp[tmpKey]
             })
+            document.title = `Bookmark editor | ${this.page.pageNum}`
         }).finally(() => {
             this.isLoading = false
         })
