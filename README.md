@@ -22,9 +22,8 @@ https://zhuanlan.zhihu.com/p/94617478
 4, 页面操作: Like or delete !
 ```
 
-## 数据
+## 安装
 ```
-安装依赖:
 创建虚拟环境:
 python3 -m venv venv
 
