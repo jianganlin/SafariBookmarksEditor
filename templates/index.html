@@ -51,6 +51,7 @@
         .record-title {
             font-weight: bold;
             font-size: 15px;
+            padding-right: 60px;
         }
 
         .record-title:hover {
@@ -100,6 +101,12 @@
             right: 0px;
         }
 
+        .delete-btn {
+            position: absolute;
+            top: 38px;
+            right: 10px;
+        }
+
         iframe {
             border: 1px solid lightgray;
             border-radius: 4px;
@@ -127,6 +134,12 @@
                                 <h4 class="record-title" @click="doShowRecord(item)">{{ item.title }}</h4>
                                 <p class="preview">{{ item.preview }}</p>
                             </div>
+                            <el-button class="delete-btn"
+                                       type="warning"
+                                       size="mini"
+                                       icon="el-icon-delete" circle
+                                       @click="doDeleteOne(item.id)">
+                            </el-button>
                         </div>
                     </el-card>
                 </el-timeline-item>
@@ -156,8 +169,8 @@
                             <el-button size="mini" icon="el-icon-back" circle @click="doShowPrevious"></el-button>
                         </el-col>
                         <el-col :span="16" style="text-align: center">
-                            <el-button size="mini" type="success" icon="el-icon-star-off" circle></el-button>
-                            <el-button size="mini" type="danger" icon="el-icon-delete" circle></el-button>
+                            <el-button size="mini" type="danger" icon="el-icon-delete" circle
+                                       @click="doDeleteOne(tmpItem.id)"></el-button>
                         </el-col>
                         <el-col :span="4" style="text-align: right">
                             <el-button size="mini" icon="el-icon-right" circle @click="doShowNext"></el-button>

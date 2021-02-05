@@ -20,7 +20,8 @@ new Vue({
                 imgUrl: '',
                 preview: '',
                 title: '',
-                url: ''
+                url: '',
+                id: null
             },
             page: {
                 pageNum: 1,
@@ -52,14 +53,14 @@ new Vue({
     methods: {
         doLoadPage(page = 1) {
             this.isLoading = true
-        pageItems(page).then(resp => {
-            Object.keys(this.page).forEach(tmpKey => {
-                this.page[tmpKey] = resp[tmpKey]
+            pageItems(page).then(resp => {
+                Object.keys(this.page).forEach(tmpKey => {
+                    this.page[tmpKey] = resp[tmpKey]
+                })
+                document.title = `Bookmark editor | ${this.page.pageNum}`
+            }).finally(() => {
+                this.isLoading = false
             })
-            document.title = `Bookmark editor | ${this.page.pageNum}`
-        }).finally(() => {
-            this.isLoading = false
-        })
         },
         doShowRecord(item) {
             this.isShowDialog = true
@@ -93,6 +94,22 @@ new Vue({
             } else {
                 this.$message('没有了')
             }
+        },
+        doDeleteOne(id) {
+            this.isLoading = true
+            deleteOne(id).then(resp => {
+                this.isShowDialog = false
+                const idx = this.page.items.findIndex(value => {
+                    return value.id === id
+                })
+                if (idx >= 0) {
+                    this.page.items.splice(idx, 1)
+                }
+            }).catch(err => {
+                this.$message(`操作失败 (${err.message})`)
+            }).finally(() => {
+                this.isLoading = false
+            })
         }
     }
 })

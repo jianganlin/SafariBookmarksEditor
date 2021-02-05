@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, Response
 import os
 import sys
 from flask_sqlalchemy import SQLAlchemy
@@ -29,7 +29,7 @@ app.jinja_env.variable_start_string = '(('  # 修改变量开始符号
 app.jinja_env.variable_end_string = '))'  # 修改变量结束符号
 app.jinja_env.comment_start_string = '(#'  # 修改注释开始符号
 app.jinja_env.comment_end_string = '#)'  # 修改注释结束符号
-app.jinja_env.auto_reload = True # 热更新
+app.jinja_env.auto_reload = True  # 热更新
 
 
 class ReadingItem(db.Model):
@@ -91,14 +91,9 @@ def index():
     return render_template('index.html', time=int(time.time() * 1000))
 
 
-@app.route('/hello')
-def hello():
-    return 'Hello'
-
-
 @app.route('/bookmark/<int:page_num>')
 def bookmark(page_num=1):
-    page = ReadingItem.query.paginate(page=page_num, per_page=20)
+    page = ReadingItem.query.filter_by(isDeleted=0).paginate(page=page_num, per_page=20)
 
     item_list = reading_item_schema.dump(page.items)
     result = {
@@ -113,8 +108,24 @@ def bookmark(page_num=1):
     return json.dumps(result), 200, {"Content-Type": "application/json"}
 
 
+@app.route('/delete_item', methods=['POST'])
+def delete_item():
+    app.logger.debug('======Here=====')
+    if not request.is_json:
+        return '', 400, {"Content-Type": "application/json"}
+
+    tmp_id = request.json['id']
+    one = ReadingItem.query.get(tmp_id)
+    if not one:
+        return '', 404, {"Content-Type": "application/json"}
+    else:
+        one.isDeleted = 1
+        db.session.commit()
+        return request.json, 200, {"Content-Type": "application/json"}
+
+
 # 指定flask run命令启动
 if __name__ == '__main__':
-    init_data()
-    # app.run(host='127.0.0.1', port=5432, debug=True)
-    app.run()
+    # init_data()
+    app.run(host='127.0.0.1', port=5432, debug=True)
+    # app.run()
