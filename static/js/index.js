@@ -31,12 +31,8 @@ new Vue({
                 nextNum: 2,
                 hasNext: true,
                 items: [],
-            }
-        }
-    },
-    computed: {
-        xxx: function () {
-            return ''
+            },
+            isLoadingContent: false
         }
     },
     mounted() {
@@ -56,9 +52,16 @@ new Vue({
             })
         },
         doShowRecord(item) {
-            this.isShowDialog = true
             Object.keys(this.tmpItem).forEach(tmpKey => {
                 this.tmpItem[tmpKey] = item[tmpKey]
+            })
+            this.isShowDialog = true
+            this.$nextTick(() => {
+                this.isLoadingContent = true
+                const tmpFrame = document.getElementById('contentIframeId')
+                tmpFrame.onload = () => {
+                    this.isLoadingContent = false
+                }
             })
         },
         doShowNext() {
@@ -71,6 +74,7 @@ new Vue({
                 Object.keys(this.tmpItem).forEach(tmpKey => {
                     this.tmpItem[tmpKey] = item[tmpKey]
                 })
+                this.isLoadingContent = true
             } else {
                 this.$message('没有了')
             }
