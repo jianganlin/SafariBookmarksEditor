@@ -89,6 +89,16 @@ new Vue({
             }
         },
         doDeleteOne(id) {
+            this.$confirm('确定删除该条记录吗 ?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this._deleteRecord(id)
+            }).catch(() => {
+            });
+        },
+        _deleteRecord(id) {
             this.isLoading = true
             deleteOne(id).then(resp => {
                 this.isShowDialog = false
