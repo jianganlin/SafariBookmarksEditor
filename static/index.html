@@ -134,6 +134,7 @@
             color: black;
             font-weight: normal;
             font-size: 12px;
+            cursor: pointer;
         }
 
         .sync-btn:hover {
@@ -171,7 +172,7 @@
                                 <p class="preview">{{ item.preview }}</p>
                             </div>
                             <el-button class="delete-btn"
-                                       type="warning"
+                                       type="danger"
                                        size="mini"
                                        icon="el-icon-delete" circle
                                        @click="doDeleteOne(item.id)">
