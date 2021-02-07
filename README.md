@@ -1,5 +1,6 @@
 ## Safari Bookmarks Editor
-这个项目用于编辑Mac OS下, Safari书签的简单应用. 基于Python3.8,  Flask1.1.1, Vue2.6
+这个项目用于编辑Mac OS下, Safari书签的简单应用. 
+基于Python3.8,  Flask1.1.1, Vue2.6, element
 
 ## 参考:
 ```
@@ -19,7 +20,7 @@ https://zhuanlan.zhihu.com/p/94617478
 1, 读取~/Library/Safari/Bookmarks.plist到本地目录;
 2, 初始化数据到本地: sqlite DB;
 3, 读取数据到Web页面;
-4, 页面操作: Like or delete !
+4, 页面操作: 查看阅读或删除
 ```
 
 ## 安装

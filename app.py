@@ -3,7 +3,7 @@ import os
 import sys
 from flask_sqlalchemy import SQLAlchemy
 import click
-from tool import read_reading_list
+from tool import read_reading_list, sync_to_safari_plist
 import json
 from flask_marshmallow import Marshmallow
 import time
@@ -16,8 +16,7 @@ else:
 
 app = Flask(__name__)
 ma = Marshmallow(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL',
-                                                  prefix + os.path.join(app.root_path, 'data', 'data.db'))
+app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data', 'data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -88,11 +87,17 @@ def initdb(drop):
     init_data()
 
 
-@app.route('/')
-def index():
-    # app.logger.debug('A value for debugging')
-    app.logger.debug('====Welcome !=====')
-    return render_template('index.html', time=int(time.time() * 1000))
+# @app.route('/')
+# def index():
+#     # app.logger.debug('A value for debugging')
+#     app.logger.debug('====Welcome !=====')
+#     return render_template('index.html', time=int(time.time() * 1000))
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return app.send_static_file("index.html")
 
 
 @app.route('/bookmark/<int:page_num>')
@@ -126,6 +131,24 @@ def delete_item():
         one.isDeleted = 1
         db.session.commit()
         return request.json, 200, {"Content-Type": "application/json"}
+
+
+# 同步数据到Safari plist
+@app.route('/sync_to_safari', methods=['GET'])
+def sync_to_safari():
+    all_items = ReadingItem.query.all()
+    url_set = set([])
+    for tmp in all_items:
+        if tmp.isDeleted == 0:
+            url_set.add(tmp.url)
+
+    sync_to_safari_plist(url_set)
+
+    a_list = []
+    for tmp in url_set:
+        a_list.append(tmp)
+
+    return json.dumps(a_list), 200, {"Content-Type": "application/json"}
 
 
 # 指定flask run命令启动

@@ -40,14 +40,7 @@ new Vue({
         }
     },
     mounted() {
-        // this.isLoading = true
-        //         // getData().then(resp => {
-        //         //     this.page.items = resp
-        //         //     // console.log('OK: ', resp)
-        //         // }).finally(() => {
-        //         //     this.isLoading = false
-        //         // })
-
+        document.getElementById('app').style.display = "block"
         this.doLoadPage(1)
     },
     methods: {
@@ -57,7 +50,7 @@ new Vue({
                 Object.keys(this.page).forEach(tmpKey => {
                     this.page[tmpKey] = resp[tmpKey]
                 })
-                document.title = `Bookmark editor | ${this.page.pageNum}`
+                document.title = `Bookmark editor | Page ${this.page.pageNum}`
             }).finally(() => {
                 this.isLoading = false
             })
@@ -106,6 +99,29 @@ new Vue({
                     this.page.items.splice(idx, 1)
                 }
             }).catch(err => {
+                this.$message(`操作失败 (${err.message})`)
+            }).finally(() => {
+                this.isLoading = false
+            })
+        },
+        doSync() {
+            this.$confirm('这是一个危险操作, 将会覆盖文件~/Library/Safari/Bookmarks.plist', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this._syncData()
+            }).catch(() => {
+            });
+        },
+        _syncData() {
+            this.isLoading = true
+            syncToSafari().then(resp => {
+                this.$message({
+                    message: '操作成功',
+                    type: 'success'
+                })
+            }).catch(error => {
                 this.$message(`操作失败 (${err.message})`)
             }).finally(() => {
                 this.isLoading = false
