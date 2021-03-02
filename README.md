@@ -48,3 +48,9 @@ flask initdb
 启动:
 flask run
 ```
+
+## 参考
+```
+网络爬虫scrapy: https://www.osgeo.cn/scrapy/topics/media-pipeline.html
+Flask官网: https://www.osgeo.cn/flask/
+```
